@@ -1,7 +1,7 @@
 import pygame
 from pygame.sprite import Sprite
 
-from game.utils.constants import SPACESHIP, SCREEN_WIDTH
+from game.utils.constants import SPACESHIP, SCREEN_WIDTH, SCREEN_HEIGHT
 
 # casi Todo en pygame es un objeto
 # Un personaje en mi juego es un objeto (instancia de algo)
@@ -28,9 +28,18 @@ class SpaceShip(Sprite):
             self.image_rect.x += self.velocity
         if keys[pygame.K_LEFT]:
             self.image_rect.x -= self.velocity
+        if keys[pygame.K_UP]:
+            self.image_rect.y -= self.velocity
+        if keys[pygame.K_DOWN]:
+            self.image_rect.y += self.velocity
         if self.image_rect.right > SCREEN_WIDTH: # Verifica si el lado derecho de la imagen de la nave ha alcanzado el limite de la pantalla(SCREEN_WIDTH), posición left x = 0
             self.image_rect.left  = 0
         if self.image_rect.left < 0:
             self.image_rect.right = SCREEN_WIDTH
+        if self.image_rect.bottom > SCREEN_HEIGHT:
+            self.image_rect.top = 0
+        if self.image_rect.top < 0:
+            self.image_rect.bottom = SCREEN_HEIGHT
+        
 
 
