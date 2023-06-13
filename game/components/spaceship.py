@@ -22,24 +22,44 @@ class SpaceShip(Sprite):
         self.velocity = 5 # Se creo una variable para la velocidad
 
     def update(self):
-        keys = pygame.key.get_pressed() # Esta linea almacena en la variable keys lo que se preciona en el teclado, booleano
+        self.handle_input()
+        self.handle_boundary()
 
-        if keys[pygame.K_RIGHT]:  # Verifica si la tecla "right" esta siendo presionada, si es true incremeta la posición x por la velocidad (self.velocity)
-            self.image_rect.x += self.velocity
+    def handle_input(self):
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_RIGHT]:
+            self.move_right()
         if keys[pygame.K_LEFT]:
-            self.image_rect.x -= self.velocity
+            self.move_left()
         if keys[pygame.K_UP]:
-            self.image_rect.y -= self.velocity
+            self.move_up()
         if keys[pygame.K_DOWN]:
-            self.image_rect.y += self.velocity
-        if self.image_rect.right > SCREEN_WIDTH: # Verifica si el lado derecho de la imagen de la nave ha alcanzado el limite de la pantalla(SCREEN_WIDTH), posición left x = 0
-            self.image_rect.left  = 0
+            self.move_down()
+
+    def handle_boundary(self):
+        if self.image_rect.right > SCREEN_WIDTH:
+            self.image_rect.left = 0
         if self.image_rect.left < 0:
             self.image_rect.right = SCREEN_WIDTH
         if self.image_rect.bottom > SCREEN_HEIGHT:
             self.image_rect.top = 0
         if self.image_rect.top < 0:
             self.image_rect.bottom = SCREEN_HEIGHT
+            
+    def move_right(self):
+        self.image_rect.x += self.velocity
+
+    def move_left(self):
+        self.image_rect.x -= self.velocity
+
+    def move_up(self):
+        self.image_rect.y -= self.velocity
+
+    def move_down(self):
+        self.image_rect.y += self.velocity
+
+
         
 
 
