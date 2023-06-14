@@ -21,12 +21,12 @@ class SpaceShip(Sprite):
         self.image_rect.y = self.image_size[1]
         self.velocity = 5 # Se creo una variable para la velocidad
 
-    def update(self):
+    def update(self): # Llama a la entrada del teclado y a los limites de la pantalla
         self.handle_input()
         self.handle_boundary()
 
-    def handle_input(self):
-        keys = pygame.key.get_pressed()
+    def handle_input(self):  # Para manejar la entrada del teclado
+        keys = pygame.key.get_pressed()   
 
         if keys[pygame.K_RIGHT]:
             self.move_right()
@@ -37,7 +37,7 @@ class SpaceShip(Sprite):
         if keys[pygame.K_DOWN]:
             self.move_down()
 
-    def handle_boundary(self):
+    def handle_boundary(self):  # Para manejar los límites de la pantalla y los métodos 
         if self.image_rect.right > SCREEN_WIDTH:
             self.image_rect.left = 0
         if self.image_rect.left < 0:
@@ -46,7 +46,7 @@ class SpaceShip(Sprite):
             self.image_rect.top = 0
         if self.image_rect.top < 0:
             self.image_rect.bottom = SCREEN_HEIGHT
-            
+
     def move_right(self):
         self.image_rect.x += self.velocity
 
