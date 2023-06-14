@@ -17,8 +17,8 @@ class SpaceShip(Sprite):
         self.image_size = (40, 60)
         self.image = pygame.transform.scale(SPACESHIP, self.image_size)
         self.image_rect = self.image.get_rect()
-        self.image_rect.x = self.image_size[0]
-        self.image_rect.y = self.image_size[1]
+        self.image_rect.x = SCREEN_WIDTH // 2 - self.image_size[0] // 2
+        self.image_rect.y = SCREEN_HEIGHT // 2 - self.image_size[1] // 2
         self.velocity = 5 # Se creo una variable para la velocidad
 
     def update(self): # Llama a la entrada del teclado y a los limites de la pantalla
