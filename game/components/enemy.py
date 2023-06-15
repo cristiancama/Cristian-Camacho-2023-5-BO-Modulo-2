@@ -10,7 +10,7 @@ from game.utils.constants import ENEMY_1, SCREEN_WIDTH, SCREEN_HEIGHT
 
 class Enemy(Sprite):
     def __init__(self, x, y):
-        super().__init__()
+        super().__init__()  # Asegura que el constructor de la clase (sprite) se ejecute antes de la inicialización de enemy
         self.image_size = (40, 60) # Tamaño de la imagen
         self.image = pygame.transform.scale(ENEMY_1, self.image_size)  # Para redimensionar la imagen al tamaño especificado 
         self.rect = self.image.get_rect() # Rectangulo de colisión 
