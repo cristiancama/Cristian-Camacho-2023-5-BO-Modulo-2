@@ -24,7 +24,6 @@ class SpaceShip(Sprite):
         self.image_rect.x = SCREEN_WIDTH // 2 - self.image_size[0] // 2
         self.image_rect.y = SCREEN_HEIGHT // 2 - self.image_size[1] // 2
         self.velocity = 10 # Se creo una variable para la velocidad
-        self.bullets = pygame.sprite.Group()
 
 
 
@@ -32,10 +31,6 @@ class SpaceShip(Sprite):
         self.handle_input()
         self.handle_boundary() 
         
-    def fire_bullet(self):
-        bullet = Bullet(self.image_rect.centerx, self.image_rect.top, self.game)
-        self.bullets.add(bullet)
-       # bullet.game = self.game  # Asignar el objeto Game a la bala
 
     def handle_input(self):  # Para manejar la entrada del teclado
         keys = pygame.key.get_pressed()   
@@ -48,8 +43,6 @@ class SpaceShip(Sprite):
             self.move_up()
         if keys[pygame.K_DOWN]:
             self.move_down()
-        if keys[pygame.K_SPACE]: # Se agrego la tecla "space" para disparar
-            self.fire_bullet()
 
 
     def handle_boundary(self):  # Para manejar los límites de la pantalla y los métodos 
@@ -75,6 +68,6 @@ class SpaceShip(Sprite):
         self.image_rect.y += self.velocity
 
 
-        
+
 
 

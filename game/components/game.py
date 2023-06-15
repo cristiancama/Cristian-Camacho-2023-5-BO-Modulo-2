@@ -8,6 +8,8 @@ from game.components.enemy import Enemy
 
 from game.components.bullet import Bullet
 
+from pygame.sprite import Group
+
 
 
 # Game tiene un "Spaceship" - Por lo general esto es iniciliazar un objeto Spaceship en el __init__
@@ -25,20 +27,17 @@ class Game:
 
         # Game tiene un "Spaceship"
         self.spaceship = SpaceShip()
-        self.spaceship.game = self
 
 
         self.enemy = Enemy(SCREEN_WIDTH // 2, 100) # Posición inicial 
-        self.enemy_group = pygame.sprite.Group(self.enemy) # Crear grupo de enemigos
-        
-        self.bullet_group = pygame.sprite.Group()
 
+        self.bullets = Group() # Lista para almacenar las balas disparadas por el Spaceship
+        self.enemies = pygame.sprite.Group()
+        self.enemies.add(self.enemy)
 
     def run(self):
         # Game loop: events - update - draw
         self.playing = True
-
-        self.spaceship.game = self
 
         # while self.playing == True
         while self.playing: # Mientras el atributo playing (self.playing) sea true "repito"
@@ -56,6 +55,13 @@ class Game:
             # si el "event" type es igual a pygame.QUIT entonces cambiamos playing a False
             if event.type == pygame.QUIT:
                 self.playing = False
+            elif event.type == pygame.KEYDOWN: # Detecta la tecla espacio y dispara una nueva bala cuando se presiona
+                if event.key == pygame.K_SPACE:
+                    self.fire_bullet()
+
+    def fire_bullet(self):
+        bullet = Bullet(self.spaceship.image_rect.centerx, self.spaceship.image_rect.top)
+        self.bullets.add(bullet)
 
 
     def update(self):
@@ -63,14 +69,12 @@ class Game:
         self.spaceship.update()
         self.enemy.update()  # Actualiza el enemigo    
 
-        #Actualizar balas
-        self.spaceship.bullets.update()
-        self.bullet_group.update()
+        # Actualizar las balas
+        self.bullets.update()
+        self.enemies.update()
 
-        collisions = pygame.sprite.spritecollide(self.enemy, self.bullet_group, True)
-        if collisions:
-            self.enemy.kill()
-
+        # Comprobar colisiones entre balas y enemigos
+        collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, True)
 
     def draw(self):
         self.clock.tick(FPS)
@@ -82,9 +86,8 @@ class Game:
         self.screen.blit(self.spaceship.image, self.spaceship.image_rect)
         self.screen.blit(self.enemy.image, self.enemy.rect) # Dibujamos el enemigo en la pantalla
 
-        #Dibujar las balas
-        for bullet in self.spaceship.bullets:
-            self.screen.blit(bullet.image, bullet.rect)
+        # Dibujar las balas
+        self.bullets.draw(self.screen)
         
         
         pygame.display.update()
