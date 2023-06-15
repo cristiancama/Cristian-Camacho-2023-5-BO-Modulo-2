@@ -32,8 +32,8 @@ class Game:
         self.enemy = Enemy(SCREEN_WIDTH // 2, 100) # Posición inicial 
 
         self.bullets = Group() # Lista para almacenar las balas disparadas por el Spaceship
-        self.enemies = pygame.sprite.Group()
-        self.enemies.add(self.enemy)
+        self.enemies = pygame.sprite.Group() # Grupo para almacenar los sprites de los enemigos.
+        self.enemies.add(self.enemy) # Es el sprite de un enemigo en el juego
 
     def run(self):
         # Game loop: events - update - draw
@@ -55,13 +55,14 @@ class Game:
             # si el "event" type es igual a pygame.QUIT entonces cambiamos playing a False
             if event.type == pygame.QUIT:
                 self.playing = False
-            elif event.type == pygame.KEYDOWN: # Detecta la tecla espacio y dispara una nueva bala cuando se presiona
+            elif event.type == pygame.KEYDOWN: # Detecta la tecla espacio y dispara una bala cuando se presiona
                 if event.key == pygame.K_SPACE:
                     self.fire_bullet()
 
+
     def fire_bullet(self):
-        bullet = Bullet(self.spaceship.image_rect.centerx, self.spaceship.image_rect.top)
-        self.bullets.add(bullet)
+        bullet = Bullet(self.spaceship.image_rect.centerx, self.spaceship.image_rect.top)  # Pasa las coordenadas de la nave
+        self.bullets.add(bullet) # Se agrega la bala al grupo de balas 
 
 
     def update(self):
@@ -69,7 +70,7 @@ class Game:
         self.spaceship.update()
         self.enemy.update()  # Actualiza el enemigo    
 
-        # Actualizar las balas
+        # Actualizar las balas y enemigos
         self.bullets.update()
         self.enemies.update()
 
