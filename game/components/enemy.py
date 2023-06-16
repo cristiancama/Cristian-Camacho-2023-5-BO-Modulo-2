@@ -14,8 +14,9 @@ class Enemy(Sprite):
         self.image_size = (40, 60)
         self.image = pygame.transform.scale(ENEMY_1, self.image_size)
         self.rect = self.image.get_rect()
-        self.rect.centerx = x
-        self.rect.centery = y
+        self.rect.x = x
+        self.rect.y = y
+        self.image_rect = self.rect.copy()
         self.velocity = 5
         self.direction = 1
 
