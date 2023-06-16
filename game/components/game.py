@@ -69,7 +69,7 @@ class Game:
     def handle_enemy_events(self):
         current_time = pygame.time.get_ticks()  # Obtener el tiempo actual en milisegundos
 
-        if current_time - self.last_enemy_shot >= 2000:  # Verificar si han pasado 2 segundos (2000 ms)
+        if current_time - self.last_enemy_shot >= 2000:
             self.fire_bullet_enemy()
             self.last_enemy_shot = current_time
 
@@ -86,8 +86,9 @@ class Game:
         self.bullets.add(bullet)
     
     def fire_bullet_enemy(self):
-        bullet_enemy = BulletEnemy(self.enemy.rect.centerx, self.enemy.rect.bottom)
-        self.bullets_enemy.add(bullet_enemy)
+        for enemy in self.enemies:
+            bullet_enemy = BulletEnemy(enemy.rect.centerx, enemy.rect.bottom)
+            self.bullets_enemy.add(bullet_enemy)
 
     def show_game_over(self):
         self.playing = False
