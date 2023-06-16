@@ -29,17 +29,17 @@ class Game:
         self.x_pos_bg = 0
         self.y_pos_bg = 0
 
-        self.bullets_hit = 0
-        self.game_over_count = 0
+        self.bullets_hit = 0  # registro de la cantidad de proyectiles disparados por el jugador que han impactado enemigos u objetivos
+        self.game_over_count = 0 # conteo de la cantidad de veces que se ha alcanzado el estado de "Game Over" en el juego.
 
-        self.enemy_positions = []
+        self.enemy_positions = [] #almacena las posiciones de los enemigos en el juego.
 
-        self.last_enemy_shot = 0
+        self.last_enemy_shot = 0 # guarda el tiempo o momento en el juego en el que se realizó el último disparo por parte de un enemigo.
 
         self.spaceship = SpaceShip()
-        self.bullets = Group()
-        self.enemies = Group()
-        self.bullets_enemy = Group()
+        self.bullets = Group() #  almacenar y gestionar los proyectiles disparados por el jugador.
+        self.enemies = Group() # almacenar y gestionar los enemigos del juego.
+        self.bullets_enemy = Group() #  almacenar y gestionar los proyectiles disparados por los enemigos.
 
         self.enemy = self.create_enemy(SCREEN_WIDTH // 2, 100)  # Create an enemy at the specified position
 
@@ -48,10 +48,10 @@ class Game:
         self.enemies.add(enemy)
         return enemy
 
-    def create_multiple_enemies(self, positions):
-        self.enemy_positions.extend(positions)
+    def create_multiple_enemies(self, positions): # crear múltiples enemigos en el juego
+        self.enemy_positions.extend(positions) # Actualiza la lista self.enemy_position
         for pos in positions:
-            self.create_enemy(*pos)  # Descomprimir la tupla de posición y crear un enemigo
+            self.create_enemy(*pos)  # Crea el enemigo en cada una de las posiciones
 
     def run(self):
         self.playing = True
@@ -69,9 +69,9 @@ class Game:
     def handle_enemy_events(self):
         current_time = pygame.time.get_ticks()  # Obtener el tiempo actual en milisegundos
 
-        if current_time - self.last_enemy_shot >= 2000:
+        if current_time - self.last_enemy_shot >= 2000: # Controla el tiempo entre los disparos de los enemigos en el juego 
             self.fire_bullet_enemy()
-            self.last_enemy_shot = current_time
+            self.last_enemy_shot = current_time  #  Se actualiza el tiempo del último disparo para el siguiente cálculo
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -81,18 +81,18 @@ class Game:
                 if event.key == pygame.K_SPACE: # Presionar la tecla de espacio para disparar un proyectil
                     self.fire_bullet()
 
-    def fire_bullet(self):  # Encapsula la creación de un proyectil y su adición al grupo de balas
+    def fire_bullet(self):  # crear una instancia de una bala y agregarla al grupo de balas del juego
         bullet = Bullet(self.spaceship.rect.centerx, self.spaceship.rect.top)
         self.bullets.add(bullet)
     
-    def fire_bullet_enemy(self):
+    def fire_bullet_enemy(self):  # crear instancias de balas enemigas para cada enemigo presente en el juego y agregarlas al grupo de balas enemigas.
         for enemy in self.enemies:
             bullet_enemy = BulletEnemy(enemy.rect.centerx, enemy.rect.bottom)
             self.bullets_enemy.add(bullet_enemy)
 
     def show_game_over(self):
-        self.playing = False
-        self.game_over_count += 1
+        self.playing = False # controla el estado del juego, al establecerlo en False, indica que el juego ha finalizado.
+        self.game_over_count += 1  # lleva un registro de la cantidad de veces que se ha alcanzado el estado de "Game Over" en el juego.
 
         # Obtener las dimensiones de la pantalla
         screen_width = self.screen.get_width()
@@ -116,6 +116,8 @@ class Game:
         self.bullets.update()
         self.bullets_enemy.update()
 
+        # Colisiones entre las balas del spaceship y los enemigos
+        #elimina los sprites colisionados de sus grupos correspondientes
         collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, True)
         if collisions:
             for enemy in collisions:
@@ -137,9 +139,9 @@ class Game:
 
         self.screen.blit(self.spaceship.image, self.spaceship.rect)
     
-        self.enemies.draw(self.screen)
-        self.bullets.draw(self.screen)
-        self.bullets_enemy.draw(self.screen)
+        self.enemies.draw(self.screen)  # Se dibuja los enemigos
+        self.bullets.draw(self.screen) # Se dibuja las balas del spaceship
+        self.bullets_enemy.draw(self.screen) # Se dibuja las balas de los enemigos
 
         pygame.display.update()
         pygame.display.flip()
