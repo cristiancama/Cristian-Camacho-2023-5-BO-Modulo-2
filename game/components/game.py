@@ -29,6 +29,8 @@ class Game:
         self.x_pos_bg = 0
         self.y_pos_bg = 0
 
+        self.enemy_positions = []
+
         self.last_enemy_shot = 0
 
         self.spaceship = SpaceShip()
@@ -44,11 +46,13 @@ class Game:
         return enemy
 
     def create_multiple_enemies(self, positions):
+        self.enemy_positions.extend(positions)
         for pos in positions:
             self.create_enemy(*pos)  # Descomprimir la tupla de posición y crear un enemigo
 
     def run(self):
         self.playing = True
+        self.create_multiple_enemies([(100, 100), (200, 100), (300, 100)])  # Ejemplo de creación de múltiples enemigos
         while self.playing:
             self.handle_events()
             self.handle_enemy_events()
