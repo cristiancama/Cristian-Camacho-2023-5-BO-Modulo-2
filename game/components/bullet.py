@@ -17,5 +17,7 @@ class Bullet(Sprite):
 
     def update(self):
         self.rect.y -= self.velocity
+
+        # La bottom es menor que 0 se elimina la bala de la pantalla usando kill
         if self.rect.bottom < 0:
             self.kill()
