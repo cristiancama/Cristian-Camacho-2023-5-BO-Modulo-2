@@ -1,6 +1,6 @@
 import pygame
 
-from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
+from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE, GAMEOVER
 
 from game.components.spaceship import SpaceShip
 
@@ -28,6 +28,9 @@ class Game:
         self.game_speed = 10
         self.x_pos_bg = 0
         self.y_pos_bg = 0
+
+        self.bullets_hit = 0
+        self.game_over_count = 0
 
         self.enemy_positions = []
 
@@ -79,12 +82,32 @@ class Game:
                     self.fire_bullet()
 
     def fire_bullet(self):  # Encapsula la creación de un proyectil y su adición al grupo de balas
-        bullet = Bullet(self.spaceship.image_rect.centerx, self.spaceship.image_rect.top)
+        bullet = Bullet(self.spaceship.rect.centerx, self.spaceship.rect.top)
         self.bullets.add(bullet)
     
     def fire_bullet_enemy(self):
         bullet_enemy = BulletEnemy(self.enemy.rect.centerx, self.enemy.rect.bottom)
         self.bullets_enemy.add(bullet_enemy)
+
+    def show_game_over(self):
+        self.playing = False
+        self.game_over_count += 1
+
+        # Obtener las dimensiones de la pantalla
+        screen_width = self.screen.get_width()
+        screen_height = self.screen.get_height()
+
+        # Obtener las dimensiones de la imagen "GAMEOVER"
+        gameover_width = GAMEOVER.get_width()
+        gameover_height = GAMEOVER.get_height()
+
+        # Calcular las coordenadas de posición para centrar la imagen "GAMEOVER"
+        gameover_x = (screen_width - gameover_width) // 2
+        gameover_y = (screen_height - gameover_height) // 2
+
+        self.screen.blit(GAMEOVER, (gameover_x, gameover_y))
+        pygame.display.flip()
+        pygame.time.wait(2000)  # Espera 2 segundos antes de salir del juego
 
     def update(self):
         self.spaceship.update()
@@ -96,13 +119,23 @@ class Game:
         if collisions:
             for enemy in collisions:
                 enemy.kill()
+            self.bullets_hit += len(collisions)
+
+        # Verificar si el contador de balas impactadas es mayor a 5                   
+        # Colisiones entre bala enemiga y nave espacial
+        collision_spaceship = pygame.sprite.spritecollide(self.spaceship, self.bullets_enemy, True)
+        if collision_spaceship:
+            self.bullets_hit += len(collision_spaceship)
+            if self.bullets_hit >= 5:
+                self.show_game_over()
 
     def draw(self):
         self.clock.tick(FPS)
         self.screen.fill((255, 255, 255))
         self.draw_background()
 
-        self.screen.blit(self.spaceship.image, self.spaceship.image_rect)
+        self.screen.blit(self.spaceship.image, self.spaceship.rect)
+    
         self.enemies.draw(self.screen)
         self.bullets.draw(self.screen)
         self.bullets_enemy.draw(self.screen)

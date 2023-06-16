@@ -20,9 +20,9 @@ class SpaceShip(Sprite):
     def __init__(self):
         self.image_size = (40, 60)
         self.image = pygame.transform.scale(SPACESHIP, self.image_size)
-        self.image_rect = self.image.get_rect()
-        self.image_rect.x = SCREEN_WIDTH // 2 - self.image_size[0] // 2
-        self.image_rect.y = SCREEN_HEIGHT // 2 - self.image_size[1] // 2
+        self.rect = self.image.get_rect()
+        self.rect.x = SCREEN_WIDTH // 2 - self.image_size[0] // 2
+        self.rect.y = SCREEN_HEIGHT // 2 - self.image_size[1] // 2
         self.velocity = 10 # Se creo una variable para la velocidad
 
 
@@ -46,26 +46,26 @@ class SpaceShip(Sprite):
 
 
     def handle_boundary(self):  # Para manejar los límites de la pantalla y los métodos 
-        if self.image_rect.right > SCREEN_WIDTH:
-            self.image_rect.left = 0
-        if self.image_rect.left < 0:
-            self.image_rect.right = SCREEN_WIDTH
-        if self.image_rect.bottom > SCREEN_HEIGHT:
-            self.image_rect.top = 0
-        if self.image_rect.top < 0:
-            self.image_rect.bottom = SCREEN_HEIGHT
+        if self.rect.right > SCREEN_WIDTH:
+            self.rect.left = 0
+        if self.rect.left < 0:
+            self.rect.right = SCREEN_WIDTH
+        if self.rect.bottom > SCREEN_HEIGHT:
+            self.rect.top = 0
+        if self.rect.top < 0:
+            self.rect.bottom = SCREEN_HEIGHT
 
     def move_right(self):
-        self.image_rect.x += self.velocity
+        self.rect.x += self.velocity
 
     def move_left(self):
-        self.image_rect.x -= self.velocity
+        self.rect.x -= self.velocity
 
     def move_up(self):
-        self.image_rect.y -= self.velocity
+        self.rect.y -= self.velocity
 
     def move_down(self):
-        self.image_rect.y += self.velocity
+        self.rect.y += self.velocity
 
 
 
