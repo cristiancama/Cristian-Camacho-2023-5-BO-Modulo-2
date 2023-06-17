@@ -145,6 +145,11 @@ class Game:
             if self.bullets_hit >= 5:
                 self.show_game_over()
 
+    def draw_stats_enemy(self):
+        font = pygame.font.Font(None, 24)
+        text = font.render(f"Bullets Hit Enemy: {self.bullets_hit}", True, (255, 255, 255))
+        self.screen.blit(text, (10, 10))
+
     def draw(self):
         self.clock.tick(FPS)
         self.screen.fill((255, 255, 255))
@@ -155,6 +160,8 @@ class Game:
         self.enemies.draw(self.screen)  # Se dibuja los enemigos
         self.bullets.draw(self.screen) # Se dibuja las balas del spaceship
         self.bullets_enemy.draw(self.screen) # Se dibuja las balas de los enemigos
+
+        self.draw_stats_enemy()  # Agrega esta línea para dibujar las estadísticas de los proyectiles impactados
 
         pygame.display.update()
         pygame.display.flip()
