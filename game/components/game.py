@@ -136,7 +136,6 @@ class Game:
         if collisions:
             for enemy in collisions:
                 enemy.kill()
-            self.bullets_hit += len(collisions)
 
         # Verificar si el contador de balas impactadas es mayor a 5                   
         # Colisiones entre bala enemiga y nave espacial
