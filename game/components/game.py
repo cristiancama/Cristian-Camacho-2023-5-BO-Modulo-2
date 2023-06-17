@@ -14,6 +14,8 @@ from pygame.sprite import Group
 
 from pygame.time import get_ticks
 
+from pygame.locals import *
+
 from game.components.game_over_screen import GameOverScreen
 
 
@@ -95,10 +97,32 @@ class Game:
             self.bullets_enemy.add(bullet_enemy)
 
     def show_game_over(self):
-        self.playing = False  # controla el estado del juego, al establecerlo en False, indica que el juego ha finalizado.
-        self.game_over_count += 1  # lleva un registro de la cantidad de veces que se ha alcanzado el estado de "Game Over" en el juego.
+        self.playing = False  # Controla el estado del juego, al establecerlo en False, indica que el juego ha finalizado.
+        self.game_over_count += 1  # Lleva un registro de la cantidad de veces que se ha alcanzado el estado de "Game Over" en el juego.
         self.game_over_screen.set_game_over_count(self.game_over_count)  # Actualizar el contador de "Game Over"
         self.game_over_screen.show()  # Mostrar la pantalla de Game Over
+
+        while True:
+            event = pygame.event.wait()
+            if event.type == KEYDOWN:
+                if event.key == K_r:  # Presionar la tecla 'R' para reiniciar el juego
+                    self.reset_game()
+                    break
+                elif event.key == K_q:  # Presionar la tecla 'Q' para cerrar la ventana
+                    pygame.quit()
+                    break
+
+    def reset_game(self):
+        # Restablecer los valores y reiniciar el juego
+        self.bullets_hit = 0
+        self.enemy_positions = []
+        self.last_enemy_shot = 0
+        self.spaceship = SpaceShip()
+        self.bullets.empty()
+        self.enemies.empty()
+        self.bullets_enemy.empty()
+        self.enemy = self.create_enemy(SCREEN_WIDTH // 2, 100)
+        self.run()
 
     def update(self):
         self.spaceship.update()

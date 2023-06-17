@@ -33,8 +33,16 @@ class GameOverScreen (Sprite):
         text_rect = text.get_rect(center=(screen_width // 2, gameover_y + gameover_height + 50))
         self.screen.blit(text, text_rect)
 
+        # Mostrar las opciones de reiniciar y cerrar
+        restart_text = self.font.render("Press 'R' to Restart", True, (255, 255, 255))
+        restart_rect = restart_text.get_rect(center=(screen_width // 2, text_rect.bottom + 50))
+        self.screen.blit(restart_text, restart_rect)
+
+        quit_text = self.font.render("Press 'Q' to Quit", True, (255, 255, 255))
+        quit_rect = quit_text.get_rect(center=(screen_width // 2, restart_rect.bottom + 30))
+        self.screen.blit(quit_text, quit_rect)
+
         pygame.display.flip()
-        pygame.time.wait(5000)  # Espera 5 segundos antes de continuar
 
     def set_game_over_count(self, count):
         self.game_over_count = count
