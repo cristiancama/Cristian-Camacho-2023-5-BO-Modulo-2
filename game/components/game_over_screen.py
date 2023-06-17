@@ -15,7 +15,7 @@ class GameOverScreen (Sprite):
     def show(self):
         self.screen.fill((0, 0, 0))  # Rellena la pantalla con negro
 
-
+        # agregar fondo de pantalla al game over
         arcane_x = SCREEN_WIDTH - ARCANE.get_width()
         arcane_y = 0
         self.screen.blit(ARCANE, (arcane_x, arcane_y))

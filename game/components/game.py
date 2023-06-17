@@ -33,6 +33,8 @@ class Game:
         self.x_pos_bg = 0
         self.y_pos_bg = 0
 
+        self.score = 0
+
         self.bullets_hit = 0  # registro de la cantidad de proyectiles disparados por el jugador que han impactado enemigos u objetivos
         self.game_over_count = 0 # conteo de la cantidad de veces que se ha alcanzado el estado de "Game Over" en el juego.
 
@@ -122,6 +124,7 @@ class Game:
         self.enemies.empty()
         self.bullets_enemy.empty()
         self.enemy = self.create_enemy(SCREEN_WIDTH // 2, 100)
+        self.score = 0
         self.run()
 
     def update(self):
@@ -136,6 +139,7 @@ class Game:
         if collisions:
             for enemy in collisions:
                 enemy.kill()
+                self.score += 1 # Incrementar el puntaje por cada enemigo eliminado
 
         # Verificar si el contador de balas impactadas es mayor a 5                   
         # Colisiones entre bala enemiga y nave espacial
@@ -144,6 +148,11 @@ class Game:
             self.bullets_hit += len(collision_spaceship)
             if self.bullets_hit >= 5:
                 self.show_game_over()
+
+    def draw_score(self):
+        font = pygame.font.Font(None, 24)
+        text = font.render(f"Score: {self.score}", True, (255, 255, 255))
+        self.screen.blit(text, (10, 40))
 
     def draw_stats_enemy(self):
         font = pygame.font.Font(None, 24)
@@ -160,6 +169,7 @@ class Game:
         self.enemies.draw(self.screen)  # Se dibuja los enemigos
         self.bullets.draw(self.screen) # Se dibuja las balas del spaceship
         self.bullets_enemy.draw(self.screen) # Se dibuja las balas de los enemigos
+        self.draw_score()  # Dibujar el puntaje en la pantalla
 
         self.draw_stats_enemy()  # Agrega esta línea para dibujar las estadísticas de los proyectiles impactados
 
