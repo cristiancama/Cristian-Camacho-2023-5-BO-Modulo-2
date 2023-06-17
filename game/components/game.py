@@ -14,6 +14,8 @@ from pygame.sprite import Group
 
 from pygame.time import get_ticks
 
+from game.components.game_over_screen import GameOverScreen
+
 
 
 # Game tiene un "Spaceship" - Por lo general esto es iniciliazar un objeto Spaceship en el __init__
@@ -42,6 +44,8 @@ class Game:
         self.bullets_enemy = Group() #  almacenar y gestionar los proyectiles disparados por los enemigos.
 
         self.enemy = self.create_enemy(SCREEN_WIDTH // 2, 100)  # Create an enemy at the specified position
+
+        self.game_over_screen = GameOverScreen(self.screen)
 
     def create_enemy(self, x, y): # Encapsula la creación de un enemigo y su adición al grupo de enemigos
         enemy = Enemy(x, y)
@@ -91,24 +95,10 @@ class Game:
             self.bullets_enemy.add(bullet_enemy)
 
     def show_game_over(self):
-        self.playing = False # controla el estado del juego, al establecerlo en False, indica que el juego ha finalizado.
+        self.playing = False  # controla el estado del juego, al establecerlo en False, indica que el juego ha finalizado.
         self.game_over_count += 1  # lleva un registro de la cantidad de veces que se ha alcanzado el estado de "Game Over" en el juego.
-
-        # Obtener las dimensiones de la pantalla
-        screen_width = self.screen.get_width()
-        screen_height = self.screen.get_height()
-
-        # Obtener las dimensiones de la imagen "GAMEOVER"
-        gameover_width = GAMEOVER.get_width()
-        gameover_height = GAMEOVER.get_height()
-
-        # Calcular las coordenadas de posición para centrar la imagen "GAMEOVER"
-        gameover_x = (screen_width - gameover_width) // 2
-        gameover_y = (screen_height - gameover_height) // 2
-
-        self.screen.blit(GAMEOVER, (gameover_x, gameover_y))
-        pygame.display.flip()
-        pygame.time.wait(5000)  # Espera 2 segundos antes de salir del juego
+        self.game_over_screen.set_game_over_count(self.game_over_count)  # Actualizar el contador de "Game Over"
+        self.game_over_screen.show()  # Mostrar la pantalla de Game Over
 
     def update(self):
         self.spaceship.update()
