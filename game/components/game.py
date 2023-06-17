@@ -108,7 +108,7 @@ class Game:
 
         self.screen.blit(GAMEOVER, (gameover_x, gameover_y))
         pygame.display.flip()
-        pygame.time.wait(2000)  # Espera 2 segundos antes de salir del juego
+        pygame.time.wait(5000)  # Espera 2 segundos antes de salir del juego
 
     def update(self):
         self.spaceship.update()
