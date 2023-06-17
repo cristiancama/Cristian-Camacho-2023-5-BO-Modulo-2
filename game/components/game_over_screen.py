@@ -2,7 +2,8 @@ import pygame
 
 from pygame.sprite import Sprite
 
-from game.utils.constants import GAMEOVER, SCREEN_WIDTH, SCREEN_HEIGHT
+from game.utils.constants import GAMEOVER, SCREEN_WIDTH, SCREEN_HEIGHT, ARCANE
+
 
 
 
@@ -13,6 +14,11 @@ class GameOverScreen (Sprite):
     
     def show(self):
         self.screen.fill((0, 0, 0))  # Rellena la pantalla con negro
+
+
+        arcane_x = SCREEN_WIDTH - ARCANE.get_width()
+        arcane_y = 0
+        self.screen.blit(ARCANE, (arcane_x, arcane_y))
 
         # Obtener las dimensiones de la pantalla
         screen_width = self.screen.get_width()
