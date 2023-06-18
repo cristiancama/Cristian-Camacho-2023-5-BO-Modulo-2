@@ -18,6 +18,7 @@ from pygame.locals import *
 
 from game.components.game_over_screen import GameOverScreen
 
+from game.components.win_screen import WinScreen
 
 
 # Game tiene un "Spaceship" - Por lo general esto es iniciliazar un objeto Spaceship en el __init__
@@ -51,6 +52,8 @@ class Game:
 
         self.game_over_screen = GameOverScreen(self.screen)
 
+        self.win_screen = WinScreen(self.screen)
+
     def create_enemy(self, x, y): # Encapsula la creación de un enemigo y su adición al grupo de enemigos
         enemy = Enemy(x, y)
         self.enemies.add(enemy)
@@ -69,6 +72,7 @@ class Game:
             self.handle_enemy_events()
             self.update()
             self.draw()
+            self.check_win_condition()
         else:
             print("Something occurred to quit the game!!!")
         pygame.display.quit()
@@ -113,6 +117,20 @@ class Game:
                 elif event.key == K_q:  # Presionar la tecla 'Q' para cerrar la ventana
                     pygame.quit()
                     break
+        
+    def show_win_screen(self):
+        self.playing = False
+        self.win_screen.show()
+
+        while True:
+            event = pygame.event.wait()
+            if event.type == KEYDOWN and event.key == K_q:
+                pygame.quit()
+                break
+
+    def check_win_condition(self):
+        if len(self.enemies) == 0:
+            self.show_win_screen()
 
     def reset_game(self):
         # Restablecer los valores y reiniciar el juego
