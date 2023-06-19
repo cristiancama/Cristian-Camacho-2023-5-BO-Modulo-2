@@ -4,7 +4,7 @@ from pygame.sprite import Sprite
 
 from game.components.bullet import Bullet
 
-from game.utils.constants import SPACESHIP, SCREEN_WIDTH, SCREEN_HEIGHT
+from game.utils.constants import SPACESHIP, SCREEN_WIDTH, SCREEN_HEIGHT, SPACESHIP_SHIELD
 
 
 # casi Todo en pygame es un objeto
@@ -25,11 +25,30 @@ class SpaceShip(Sprite):
         self.rect.y = SCREEN_HEIGHT // 2 - self.image_size[1] // 2
         self.velocity = 10 # Se creo una variable para la velocidad
 
+        self.not_shield = True
+        self.shield_duration = 3000  # Duración del escudo en milisegundos (3 segundos)
 
 
     def update(self): # Llama a la entrada del teclado y a los limites de la pantalla
         self.handle_input()
         self.handle_boundary() 
+        self.handle_shield_duration()
+
+    
+    def handle_shield_duration(self):
+        if not self.not_shield:  # Si el spaceship está protegido por el escudo
+            current_time = pygame.time.get_ticks()  # Obtener el tiempo actual en milisegundos
+            if current_time - self.shield_start_time >= self.shield_duration:
+                self.not_shield = True  # Desactivar el escudo
+                self.change_image()  # Cambiar la imagen del spaceship a su imagen original
+
+    def change_image(self): 
+        if self.not_shield:
+            self.image_size = (40, 60)
+            self.image = pygame.transform.scale(SPACESHIP, self.image_size)
+        else:
+            self.image_size = (60, 60)
+            self.image = pygame.transform.scale(SPACESHIP_SHIELD, self.image_size)
         
 
     def handle_input(self):  # Para manejar la entrada del teclado

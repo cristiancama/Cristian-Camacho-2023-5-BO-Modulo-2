@@ -20,6 +20,10 @@ from game.components.game_over_screen import GameOverScreen
 
 from game.components.win_screen import WinScreen
 
+import random
+
+from game.components.power_up import PowerUp
+
 
 # Game tiene un "Spaceship" - Por lo general esto es iniciliazar un objeto Spaceship en el __init__
 class Game:
@@ -48,6 +52,9 @@ class Game:
         self.enemies = Group() # almacenar y gestionar los enemigos del juego.
         self.bullets_enemy = Group() #  almacenar y gestionar los proyectiles disparados por los enemigos.
 
+        self.power_ups = pygame.sprite.Group()
+
+
         self.enemy = self.create_enemy(SCREEN_WIDTH // 2, 100)  # Create an enemy at the specified position
 
         self.game_over_screen = GameOverScreen(self.screen)
@@ -63,6 +70,12 @@ class Game:
         self.enemy_positions.extend(positions) # Actualiza la lista self.enemy_position
         for pos in positions:
             self.create_enemy(*pos)  # Crea el enemigo en cada una de las posiciones
+
+    def create_power_up(self, x, y):  # Añadir argumentos 'x' y 'y' para la posición del power-up
+        power_up = PowerUp()
+        power_up.rect.x = x
+        power_up.rect.y = y
+        self.power_ups.add(power_up)
 
     def run(self):
         self.playing = True
@@ -85,6 +98,9 @@ class Game:
             self.fire_bullet_enemy()
             self.last_enemy_shot = current_time  #  Se actualiza el tiempo del último disparo para el siguiente cálculo
 
+        if random.random() < 0.01:  # Generar power-up con probabilidad del 1%
+            self.create_power_up(self.enemy.rect.centerx, self.enemy.rect.bottom)
+
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -92,6 +108,7 @@ class Game:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE: # Presionar la tecla de espacio para disparar un proyectil
                     self.fire_bullet()
+
 
     def fire_bullet(self):  # crear una instancia de una bala y agregarla al grupo de balas del juego
         bullet = Bullet(self.spaceship.rect.centerx, self.spaceship.rect.top)
@@ -150,6 +167,7 @@ class Game:
         self.enemies.update()
         self.bullets.update()
         self.bullets_enemy.update()
+        self.power_ups.update()
 
         # Colisiones entre las balas del spaceship y los enemigos
         #elimina los sprites colisionados de sus grupos correspondientes
@@ -166,6 +184,15 @@ class Game:
             self.bullets_hit += len(collision_spaceship)
             if self.bullets_hit >= 5:
                 self.show_game_over()
+
+        # Colisiones entre el power_up y la nave espacial
+        collisions = pygame.sprite.spritecollide(self.spaceship, self.power_ups, True)
+        for self.power_up in collisions:
+            self.score += 5
+            self.spaceship.not_shield = False
+            self.spaceship.shield_start_time = pygame.time.get_ticks()  # Registrar el tiempo de inicio del escudo
+            self.spaceship.change_image()
+
 
     def draw_score(self):
         font = pygame.font.Font(None, 24)
@@ -190,6 +217,8 @@ class Game:
         self.draw_score()  # Dibujar el puntaje en la pantalla
 
         self.draw_stats_enemy()  # Agrega esta línea para dibujar las estadísticas de los proyectiles impactados
+
+        self.power_ups.draw(self.screen)
 
         pygame.display.update()
         pygame.display.flip()
