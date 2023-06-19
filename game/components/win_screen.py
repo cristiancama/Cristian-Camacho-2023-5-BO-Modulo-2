@@ -30,12 +30,3 @@ class WinScreen (Sprite):
         self.screen.blit(text, text_rect)
 
         pygame.display.flip()
-
-        # Esperar hasta que se presione la tecla 'Q' para cerrar la ventana
-        while True:
-            event = pygame.event.wait()
-            if event.type == QUIT:
-                pygame.quit()
-                return
-            elif event.type == KEYDOWN and event.key == K_q:
-                return
